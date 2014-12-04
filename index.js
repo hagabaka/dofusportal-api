@@ -4,6 +4,10 @@ var portalData = require('./portal-data').portalData;
 var app = express();
 app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
+app.use(function(request, response, next) {
+  response.setHeader("Access-Control-Allow-Origin", "*");
+  return next();
+});
 
 app.get('/rushu', function(request, response) {
   response.send(portalData(
