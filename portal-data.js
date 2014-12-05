@@ -45,5 +45,5 @@ exports.portalData = function(url) {
   } while(previousPage && dimensions.some(function(dimension) {
     return portals[dimension].length < 3;
   }));
-  return portals;
+  return {source: url, portals: portals};
 }
