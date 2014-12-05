@@ -10,7 +10,7 @@ app.use(function(request, response, next) {
   return next();
 });
 
-app.get('/rushu', function(request, response) {
+app.get('/Rushu', function(request, response) {
   response.send(portalData(
     'http://impsvillage.com/forums/topic/144221-rushu-dimension-portal-positions/'
   ));
