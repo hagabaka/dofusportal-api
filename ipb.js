@@ -31,7 +31,13 @@ exports.page = function(url) {
       return $('.topic_controls .pages li:last-child a').attr('href') || url;
     },
     replyUrl: function() {
-      return $('.topic_controls a[title*=Reply]').attr('href');
+      var upUrl = $('link[rel=up]').attr('href');
+      if(upUrl) {
+        var forumNumber = upUrl.match(/forum\/(\d+)/)[1];
+        var postNumber = url.match(/topic\/(\d+)/)[1];
+        var baseUrl = url.match(/(.+)\/topic\/.+/)[1];
+        return baseUrl + '/index.php?app=forums&module=post&section=post&do=reply_post&f=' + forumNumber + '&t=' + postNumber;
+      }
     }
   }
 }
