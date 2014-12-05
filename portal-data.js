@@ -20,6 +20,7 @@ function appendData(parsedPage, portals) {
         portals[dimension.toLowerCase()].push({
           coordinates: '[' + coordinatesMentioned[index].match(/-?\d+/g).join(',') + ']',
           postingDate: post.postingDate,
+          author: post.author,
           likes: post.likes
         });
       });
