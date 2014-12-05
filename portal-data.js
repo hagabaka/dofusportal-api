@@ -44,12 +44,13 @@ exports.portalData = function(url) {
   });
 
   var previousPage = page(url).lastPage();
+  var parsedPage;
   do {
-    var parsedPage = page(previousPage);
+    parsedPage = page(previousPage);
     appendData(parsedPage, portals);
     previousPage = parsedPage.previousPage();
   } while(previousPage && dimensions.some(function(dimension) {
     return portals[dimension].length < 3;
   }));
-  return {source: url, portals: portals};
+  return {source: url, portals: portals, edit: parsedPage.replyUrl()};
 }
