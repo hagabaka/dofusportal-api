@@ -11,9 +11,6 @@ exports.page = function(url) {
         return {
           author: $(this).find('.author_info [itemprop=name]').text(),
           body: $(this).find('[itemprop=commentText]').text(),
-          likes: $(this).find('.ipsLikeBar_info [itemprop=name]').map(function() {
-            return $(this).text();
-          }).toArray(),
           postingDate: $(this).find('[itemprop=commentTime]').attr('title')
         }
       }).toArray();

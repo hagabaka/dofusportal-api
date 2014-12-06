@@ -36,8 +36,7 @@ function appendData(parsedPage, portals) {
       portals[capitalize(dimension)].push({
         coordinates: coordinates,
         postingDate: post.postingDate,
-        author: post.author,
-        likes: post.likes
+        author: post.author
       });
     });
   });
