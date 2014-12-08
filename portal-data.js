@@ -16,18 +16,17 @@ var capitalize = function(string) {
 };
 
 function scanForCoordinates(text, found) {
-  var lines = text.split(/\r\n|[\n\v\f\r\x85\u2028\u2029]/);
-  lines.forEach(function(line) {
-    var dimensionsMentioned = line.match(dimensionName);
-    var coordinatesMentioned = line.match(coordinates);
-    if(dimensionsMentioned && coordinatesMentioned &&
-       dimensionsMentioned.length === coordinatesMentioned.length) {
-      dimensionsMentioned.forEach(function (dimension, index) {
-        var coordinates = '[' + coordinatesMentioned[index].match(/-?\d+/g).join(',') + ']';
-        found(capitalize(dimension), coordinates);
-      });
-    }
-  });
+  var dimensionsMentioned = text.match(dimensionName);
+  var coordinatesMentioned = text.match(coordinates);
+  if(dimensionsMentioned && coordinatesMentioned &&
+     dimensionsMentioned.length === coordinatesMentioned.length) {
+    dimensionsMentioned.forEach(function (dimension, index) {
+      var coordinates = '[' + coordinatesMentioned[index].match(/-?\d+/g).join(',') + ']';
+      found(capitalize(dimension), coordinates);
+    });
+  } else {
+    console.error('Cannot understand post: ' + text);
+  }
 }
 
 function appendData(parsedPage, portals) {
