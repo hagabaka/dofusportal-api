@@ -22,6 +22,12 @@ app.get('/Rosal', function(request, response) {
   ));
 });
 
+app.get('/Shika', function(request, response) {
+  response.send(portalData(
+    'http://impsvillage.com/forums/topic/144721-shika-dimensional-portal-positions/'
+  ));
+});
+
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'));
 });
