@@ -31,7 +31,9 @@ function scanForCoordinates(text, found) {
 
 function appendData(parsedPage, portals) {
   parsedPage.posts().reverse().forEach(function(post) {
-    scanForCoordinates(post.body, function(dimension, coordinates) {
+    var body = post.body;
+    body.find('.ipsBlockquote').remove();
+    scanForCoordinates(body.text(), function(dimension, coordinates) {
       portals[capitalize(dimension)].push({
         coordinates: coordinates,
         postingDate: post.postingDate,
