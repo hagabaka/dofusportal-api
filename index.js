@@ -10,23 +10,28 @@ app.use(function(request, response, next) {
   return next();
 });
 
-app.get('/Rushu', function(request, response) {
-  response.send(portalData(
-    'http://impsvillage.com/forums/topic/144221-rushu-dimension-portal-positions/'
-  ));
-});
+function handleServer(name, url) {
+  var data = portalData(url);
 
-app.get('/Rosal', function(request, response) {
-  response.send(portalData(
-    'http://impsvillage.com/forums/topic/144665-rosal-dimensional-portal-positions/'
-  ));
-});
+  setInterval(function() {
+    var newData = portalData(url);
+    if(newData.toString() !== data.toString()) {
+      data = newData;
+    }
+  }, 180000);
 
-app.get('/Shika', function(request, response) {
-  response.send(portalData(
-    'http://impsvillage.com/forums/topic/144721-shika-dimensional-portal-positions/'
-  ));
-});
+  app.get('/' + name, function(request, response) {
+    console.log('Waiting for data');
+    response.send(data);
+  });
+}
+
+handleServer('Rushu',
+  'http://impsvillage.com/forums/topic/144221-rushu-dimension-portal-positions/');
+handleServer('Rosal',
+  'http://impsvillage.com/forums/topic/144665-rosal-dimensional-portal-positions/');
+handleServer('Shika',
+  'http://impsvillage.com/forums/topic/144721-shika-dimensional-portal-positions/');
 
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'));
