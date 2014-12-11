@@ -1,7 +1,7 @@
 var page = require('./ipb').page;
 
 var dimensions = ['Enurado', 'Srambad', 'Xelorium'];
-var dimensionPattern = new RegExp(dimensions.join('|'), 'i');
+var dimensionPattern = new RegExp(dimensions.join('|') + '|xel', 'i');
 
 var capitalize = function(string) {
   return string.replace(/^./, function (letter) {
@@ -28,7 +28,7 @@ function scanForCoordinates(text, found) {
   do {
     var dimensionMatch = workingText.match(dimensionPattern);
     if(dimensionMatch) {
-      var dimension = dimensionMatch[0];
+      var dimension = dimensionMatch[0].replace(/^xel$/i, 'Xelorium');
       var indexAfter = dimensionMatch.index + dimension.length;
       var textAfter = workingText.substr(indexAfter);
       nextDimension = textAfter.match(dimensionPattern);
