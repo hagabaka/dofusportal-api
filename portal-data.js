@@ -1,13 +1,7 @@
 var page = require('./ipb').page;
 
 var dimensions = ['Enurado', 'Srambad', 'Xelorium'];
-var dimensionName = new RegExp(dimensions.join('|'), 'gi');
-var coordinates = '-?\\d+, ?-?\\d+';
-coordinates = new RegExp([
-  coordinates,
-  '\\[' + coordinates + '\\]',
-  '\\(' + coordinates + '\\)'
-].join('|'), 'g');
+var dimensionPattern = new RegExp(dimensions.join('|'), 'i');
 
 var capitalize = function(string) {
   return string.replace(/^./, function (letter) {
@@ -15,27 +9,58 @@ var capitalize = function(string) {
   });
 };
 
-function scanForCoordinates(text, found) {
-  var dimensionsMentioned = text.match(dimensionName);
-  var coordinatesMentioned = text.match(coordinates);
-  if(dimensionsMentioned && coordinatesMentioned &&
-     dimensionsMentioned.length === coordinatesMentioned.length) {
-    dimensionsMentioned.forEach(function (dimension, index) {
-      var coordinates = '[' + coordinatesMentioned[index].match(/-?\d+/g).join(',') + ']';
-      found(capitalize(dimension), coordinates);
-    });
+function grep(text, regexp, process) {
+  var match = text.match(regexp);
+  if(match) {
+    if(process) {
+      return process.apply(this, match);
+    } else {
+      return match[0];
+    }
   } else {
-    console.error('Cannot understand post: ' + text);
+    return null;
   }
+}
+
+function scanForCoordinates(text, found) {
+  var nextDimension;
+  do {
+    var dimensionMatch = text.match(dimensionPattern);
+    if(dimensionMatch) {
+      var dimension = dimensionMatch[0];
+      var textAfter = text.substr(0, dimensionMatch.index - 1);
+      var nextDimension = textAfter.match(dimensionPattern);
+      if(nextDimension) {
+        text = text.substr(0, nextDimension.index);
+      }
+      var coordinates = grep(text, /(-?\d)+,\s*(-?\d+)/, function(_, x, y) {
+        return '[' + x + ',' + y + ']';
+      });
+      if(coordinates) {
+        var area = grep(text, /Incarnam|Dark Jungle|Canopy Village/i, function(area) {
+          return capitalize(area);
+        });
+        var uses = grep(text, /(\d+)\s+uses/, function(_, number) {
+          return parseInt(number);
+        });
+        found(dimension, coordinates, {
+          area: area,
+          uses: uses
+        });
+      }
+    }
+  } while(text.length > 0 && nextDimension);
 }
 
 function appendData(parsedPage, portals) {
   parsedPage.posts().reverse().forEach(function(post) {
     var body = post.body;
     body.find('.ipsBlockquote').remove();
-    scanForCoordinates(body.text(), function(dimension, coordinates) {
+    scanForCoordinates(body.text(), function(dimension, coordinates, details) {
       portals[capitalize(dimension)].push({
         coordinates: coordinates,
+        area: details.area,
+        uses: details.uses,
         postingDate: post.postingDate,
         author: post.author
       });
