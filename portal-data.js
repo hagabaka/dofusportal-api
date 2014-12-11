@@ -28,7 +28,7 @@ function scanForCoordinates(text, found) {
     var dimensionMatch = text.match(dimensionPattern);
     if(dimensionMatch) {
       var dimension = dimensionMatch[0];
-      var textAfter = text.substr(0, dimensionMatch.index - 1);
+      var textAfter = text.substr(dimensionMatch.index + dimension.length);
       var nextDimension = textAfter.match(dimensionPattern);
       if(nextDimension) {
         text = text.substr(0, nextDimension.index);
@@ -48,6 +48,7 @@ function scanForCoordinates(text, found) {
           uses: uses
         });
       }
+      text = textAfter;
     }
   } while(text.length > 0 && nextDimension);
 }
