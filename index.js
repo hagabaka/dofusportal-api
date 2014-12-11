@@ -21,7 +21,6 @@ function handleServer(name, url) {
   }, 180000);
 
   app.get('/' + name, function(request, response) {
-    console.log('Waiting for data');
     response.send(data);
   });
 }
