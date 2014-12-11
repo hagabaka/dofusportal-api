@@ -1,7 +1,7 @@
 var page = require('./ipb').page;
 
 var dimensions = ['Enurado', 'Srambad', 'Xelorium'];
-var dimensionPattern = new RegExp(dimensions.join('|') + '|xel', 'i');
+var dimensionPattern = new RegExp(dimensions.join('|') + '|\\bxel\\b', 'i');
 
 var capitalize = function(string) {
   return string.replace(/^./, function (letter) {
