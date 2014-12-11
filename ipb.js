@@ -25,7 +25,8 @@ exports.page = function(url) {
       return $('.topic_controls .pages li:nth-child(2) a').attr('href') || url;
     },
     lastPage: function() {
-      return $('.topic_controls .pages li:last-child a').attr('href') || url;
+      return $('.topic_controls .forward li.last a').attr('href') ||
+             $('.topic_controls .pages li:last-child a').attr('href') || url;
     },
     replyUrl: function() {
       var upUrl = $('link[rel=up]').attr('href');
