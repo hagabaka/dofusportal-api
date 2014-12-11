@@ -6,7 +6,7 @@ app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
 app.use(function(request, response, next) {
   response.setHeader("Access-Control-Allow-Origin", "*");
-  response.setHeader('Cache-Control', 'Public, max-age=600');
+  response.setHeader('Cache-Control', 'Public');
   return next();
 });
 
