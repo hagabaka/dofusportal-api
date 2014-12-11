@@ -1,5 +1,6 @@
 var express = require('express');
 var portalData = require('./portal-data').portalData;
+var eventsource = require('express-eventsource');
 
 var app = express();
 app.set('port', (process.env.PORT || 5000));
@@ -12,17 +13,20 @@ app.use(function(request, response, next) {
 
 function handleServer(name, url) {
   var data = portalData(url);
+  var sse = eventsource();
 
   setInterval(function() {
     var newData = portalData(url);
     if(newData.toString() !== data.toString()) {
       data = newData;
+      sse.sender()(data);
     }
   }, 180000);
 
   app.get('/' + name, function(request, response) {
     response.send(data);
   });
+  app.get('/watch/' + name, sse.middleware());
 }
 
 handleServer('Rushu',
