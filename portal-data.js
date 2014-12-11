@@ -24,33 +24,37 @@ function grep(text, regexp, process) {
 
 function scanForCoordinates(text, found) {
   var nextDimension;
+  var workingText = text;
   do {
-    var dimensionMatch = text.match(dimensionPattern);
+    var dimensionMatch = workingText.match(dimensionPattern);
     if(dimensionMatch) {
       var dimension = dimensionMatch[0];
-      var textAfter = text.substr(dimensionMatch.index + dimension.length);
-      var nextDimension = textAfter.match(dimensionPattern);
+      var indexAfter = dimensionMatch.index + dimension.length;
+      var textAfter = workingText.substr(indexAfter);
+      nextDimension = textAfter.match(dimensionPattern);
       if(nextDimension) {
-        text = text.substr(0, nextDimension.index);
+        workingText = workingText.substr(0, indexAfter + nextDimension.index);
       }
-      var coordinates = grep(text, /(-?\d)+,\s*(-?\d+)/, function(_, x, y) {
+      var coordinates = grep(workingText, /(-?\d+),\s*(-?\d+)/, function(_, x, y) {
         return '[' + x + ',' + y + ']';
       });
       if(coordinates) {
-        var area = grep(text, /Incarnam|Dark Jungle|Canopy Village/i, function(area) {
+        var area = grep(workingText, /Incarnam|Dark Jungle|Canopy Village/i, function(area) {
           return capitalize(area);
         });
-        var uses = grep(text, /(\d+)\s+uses/, function(_, number) {
+        var uses = grep(workingText, /(\d+)\s+uses/, function(_, number) {
           return parseInt(number);
         });
         found(dimension, coordinates, {
           area: area,
           uses: uses
         });
+      } else {
+        console.log('Missing coordinates', workingText, text);
       }
-      text = textAfter;
+      workingText = textAfter;
     }
-  } while(text.length > 0 && nextDimension);
+  } while(workingText.length > 0 && nextDimension);
 }
 
 function appendData(parsedPage, portals) {
