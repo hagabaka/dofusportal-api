@@ -42,7 +42,7 @@ function scanForCoordinates(text, found) {
         var area = grep(workingText, /Incarnam|Dark Jungle|Canopy Village/i, function(area) {
           return capitalize(area);
         });
-        var uses = grep(workingText, /(\d+)\s+uses/, function(_, number) {
+        var uses = grep(workingText, /\(?(\d+)\)?\s+uses/, function(_, number) {
           return parseInt(number);
         });
         found(dimension, coordinates, {
