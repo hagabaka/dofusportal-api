@@ -34,6 +34,9 @@ function scanForCoordinates(text, found) {
       nextDimension = textAfter.match(dimensionPattern);
       if(nextDimension) {
         workingText = workingText.substr(0, indexAfter + nextDimension.index);
+        nextWorkingText = textAfter.slice(nextDimension.index);
+      } else {
+        nextWorkingText = textAfter;
       }
       var coordinates = grep(workingText, /(-?\d+),\s*(-?\d+)/, function(_, x, y) {
         return '[' + x + ',' + y + ']';
@@ -52,7 +55,7 @@ function scanForCoordinates(text, found) {
       } else {
         console.log('Missing coordinates', workingText, text);
       }
-      workingText = textAfter;
+      workingText = nextWorkingText;
     }
   } while(workingText.length > 0 && nextDimension);
 }
