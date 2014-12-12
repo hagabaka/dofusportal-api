@@ -28,6 +28,7 @@ function handleServer(name, url) {
   });
   app.get('/watch/' + name, function(request, response, next) {
     response.setHeader('Cache-Control', 'no-cache');
+    response.connection.setTimeout(0);
     next();
   }, sse.middleware());
 }
