@@ -16,7 +16,7 @@ function handleServer(name, url) {
 
   setInterval(function() {
     var newData = portalData(url);
-    if(newData.toString() !== data.toString()) {
+    if(JSON.stringify(newData) !== JSON.stringify(data.toString())) {
       data = newData;
       sse.sender()(data);
     }
