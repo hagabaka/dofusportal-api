@@ -12,7 +12,7 @@ app.use(function(request, response, next) {
 
 function handleServer(name, url) {
   var data = portalData(url);
-  var sse = eventsource({pingInterval: 30000});
+  var sse = eventsource({pingInterval: 25000});
 
   setInterval(function() {
     var newData = portalData(url);
