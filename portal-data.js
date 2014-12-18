@@ -2,7 +2,7 @@ var page = require('./ipb').page;
 var levenshtein = require('levenshtein-distance');
 
 var dimensions = ['Enurado', 'Srambad', 'Xelorium'];
-var dimensionPattern = new RegExp(dimensions.join('|') + '|\\bxel\\b', 'i');
+var dimensionPattern = new RegExp(dimensions.join('|'), 'i');
 
 var capitalize = function(string) {
   return string.replace(/^./, function (letter) {
@@ -32,10 +32,11 @@ function scanForCoordinates(text, found) {
       workingText = workingText.replace(misspelled, dimension);
     });
   });
+  workingText = workingText.replace(/\bxel\b/i, 'Xelorium');
   do {
     var dimensionMatch = workingText.match(dimensionPattern);
     if(dimensionMatch) {
-      var dimension = dimensionMatch[0].replace(/^xel$/i, 'Xelorium');
+      var dimension = dimensionMatch[0];
       var indexAfter = dimensionMatch.index + dimension.length;
       var textAfter = workingText.substr(indexAfter);
       nextDimension = textAfter.match(dimensionPattern);
