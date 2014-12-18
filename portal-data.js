@@ -1,4 +1,5 @@
 var page = require('./ipb').page;
+var levenshtein = require('levenshtein-distance');
 
 var dimensions = ['Enurado', 'Srambad', 'Xelorium'];
 var dimensionPattern = new RegExp(dimensions.join('|') + '|\\bxel\\b', 'i');
@@ -25,6 +26,12 @@ function grep(text, regexp, process) {
 function scanForCoordinates(text, found) {
   var nextDimension;
   var workingText = text;
+  var spellChecker = new levenshtein(workingText.split(/\s+/));
+  dimensions.forEach(function(dimension) {
+    spellChecker.find(dimension, function(misspelled) {
+      workingText = workingText.replace(misspelled, dimension);
+    });
+  });
   do {
     var dimensionMatch = workingText.match(dimensionPattern);
     if(dimensionMatch) {
