@@ -4,8 +4,8 @@ var levenshtein = require('levenshtein-distance');
 var dimensions = ['Enurado', 'Srambad', 'Xelorium'];
 var dimensionPattern = new RegExp(dimensions.join('|'), 'i');
 
-var capitalize = function(string) {
-  return string.replace(/^./, function (letter) {
+var titleCase = function(string) {
+  return string.replace(/\b\w/g, function (letter) {
     return letter.toUpperCase();
   });
 };
@@ -51,7 +51,7 @@ function scanForCoordinates(text, found) {
       });
       if(coordinates) {
         var area = grep(workingText, /Incarnam|Dark Jungle|Canopy Village/i, function(area) {
-          return capitalize(area);
+          return titleCase(area);
         });
         var uses = grep(workingText, /\(?(\d+)\)?\s+uses/, function(_, number) {
           return parseInt(number);
@@ -73,7 +73,7 @@ function appendData(parsedPage, portals) {
     var body = post.body;
     body.find('.ipsBlockquote').remove();
     scanForCoordinates(body.text(), function(dimension, coordinates, details) {
-      portals[capitalize(dimension)].push({
+      portals[titleCase(dimension)].push({
         coordinates: coordinates,
         area: details.area,
         uses: details.uses,
