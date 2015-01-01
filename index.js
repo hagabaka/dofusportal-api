@@ -24,7 +24,11 @@ function handleServer(name, url) {
 
   app.get('/' + name, function(request, response) {
     response.setHeader('Cache-Control', 'Public');
-    response.send(data);
+    if(data) {
+      response.send(data);
+    } else {
+      response.status(502).json({error: 'Error opening ImpsVillage'});
+    }
   });
   app.get('/watch/' + name, function(request, response, next) {
     response.setHeader('Cache-Control', 'no-cache');
