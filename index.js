@@ -1,5 +1,6 @@
 var express = require('express');
 var portalData = require('./portal-data').portalData;
+var storage = require('./storage');
 var eventsource = require('express-eventsource');
 
 var app = express();
@@ -12,12 +13,18 @@ app.use(function(request, response, next) {
 
 function handleServer(name, url) {
   var data = portalData(url);
+  if(!data) {
+    storage.get(name, function(storedData) {
+      data = storedData;
+    });
+  }
   var sse = eventsource({pingInterval: 25000});
 
   setInterval(function() {
     var newData = portalData(url);
     if(newData && JSON.stringify(newData) !== JSON.stringify(data.toString())) {
       data = newData;
+      storage.set(name, data);
       sse.sender()(data);
     }
   }, 180000);

@@ -17,6 +17,7 @@
     "express": "^4.10.4",
     "express-eventsource": "0.0.3",
     "levenshtein-distance": "0.0.2",
+    "memjs": "^0.8.5",
     "sync-request": "^1.0.1"
   }
 }
