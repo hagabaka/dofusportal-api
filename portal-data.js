@@ -90,14 +90,19 @@ exports.portalData = function(url) {
     portals[dimension] = [];
   });
 
-  var previousPage = page(url).lastPage();
-  var parsedPage;
-  do {
-    parsedPage = page(previousPage);
-    appendData(parsedPage, portals);
-    previousPage = parsedPage.previousPage();
-  } while(previousPage && dimensions.some(function(dimension) {
-    return portals[dimension].length < 3;
-  }));
-  return {source: url, portals: portals, edit: parsedPage.replyUrl()};
+  try {
+    var previousPage = page(url).lastPage();
+    var parsedPage;
+    do {
+      parsedPage = page(previousPage);
+      appendData(parsedPage, portals);
+      previousPage = parsedPage.previousPage();
+    } while(previousPage && dimensions.some(function(dimension) {
+      return portals[dimension].length < 3;
+    }));
+    return {source: url, portals: portals, edit: parsedPage.replyUrl()};
+  } catch(exception) {
+    console.log(exception);
+    return null;
+  }
 }
