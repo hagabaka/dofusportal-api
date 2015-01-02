@@ -1,17 +1,28 @@
 var cheerio = require('cheerio');
-var request = require('sync-request');
+var get = require('./request-fallback-to-cached');
 
 exports.page = function(url) {
-  var content = request('GET', url).getBody().toString();
+  var content = get(url);
 
   var $ = cheerio.load(content);
   return {
     posts: function() {
       return $('.post_block').map(function() {
+        var postingDate = $(this).find('[itemprop=commentTime]').attr('title');
         return {
           author: $(this).find('.author_info [itemprop=name]').text(),
           body: $(this).find('[itemprop=commentText]'),
-          postingDate: $(this).find('[itemprop=commentTime]').attr('title')
+          url: $('a[rel="bookmark"]').attr('href'),
+          postingDate: postingDate,
+          editingDate: function() {
+            var dateString = $(this).find('.edit strong').text().replace(/^Edited by [^,]+, (.+)\.$/, '$1');
+            var date = new Date(dateString);
+            if(date.valueOf()) {
+              return dateString;
+            } else {
+              return postingDate;
+            }
+          }
         }
       }).toArray();
     },
