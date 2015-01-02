@@ -3,16 +3,17 @@ var memjs = require('memjs');
 var client = memjs.Client.create();
 
 if (!client.stats()) {
-  var data = null;
-  function giveData(key, callback) {
-    return callback(data);
-  };
+  var data = {};
   client = {
-    get: giveData,
-    set: giveData
+    get: function(key, callback) {
+      return callback(data[key]);
+    },
+    set: function(key, value, callback) {
+      data[key] = value;
+      callback(value);
+      return value;
+    }
   };
-  exports.get = client.get;
-  exports.set = client.set;
 }
 
 exports.get = function(key, callback) {
