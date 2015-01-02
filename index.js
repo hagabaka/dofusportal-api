@@ -13,7 +13,9 @@ app.use(function(request, response, next) {
 
 function handleServer(name, url) {
   var data = portalData(url);
-  if(!data) {
+  if(data) {
+    storage.set(name, data);
+  } else {
     storage.get(name, function(storedData) {
       data = storedData;
     });
