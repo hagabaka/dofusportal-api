@@ -1,5 +1,5 @@
 var cheerio = require('cheerio');
-var get = require('./request-fallback-to-cached');
+var get = require('./request');
 
 exports.page = function(url) {
   var content = get(url);
