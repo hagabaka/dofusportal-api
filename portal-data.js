@@ -37,7 +37,7 @@ exports.portalData = function(url) {
     }));
     return {source: url, portals: portals, edit: parsedPage.replyUrl()};
   } catch(exception) {
-    console.log(exception);
+    console.error(exception.stack);
     return null;
   }
 }
