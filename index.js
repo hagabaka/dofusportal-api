@@ -52,6 +52,8 @@ handleServer('Rosal',
   'http://impsvillage.com/forums/topic/144665-rosal-dimensional-portal-positions/');
 handleServer('Shika',
   'http://impsvillage.com/forums/topic/144721-shika-dimensional-portal-positions/');
+handleServer('Solar',
+  'http://impsvillage.com/forums/topic/145255-solar-dimension-portal-positions/');
 
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'));
