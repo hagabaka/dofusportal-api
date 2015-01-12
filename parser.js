@@ -2,15 +2,17 @@ var levenshtein = require('levenshtein-distance');
 var utils = require('./utils');
 var grep = utils.grep;
 var names = require('./names');
-var dimensions = names.dimension;
-var areas = names.areas;
+var dimensions = names.dimensions;
 var dimensionPattern = new RegExp(dimensions.join('|'), 'i');
+var areas = names.areas;
+var areaPattern = new RegExp(areas.join('|'), 'i');
 
 module.exports = function scanForCoordinates(text, found) {
   var nextDimension;
   var workingText = text;
   var spellChecker = new levenshtein(workingText.split(/\s+/));
-  names.concat(areas).forEach(function(name) {
+  dimensions.concat(areas).forEach(function(name) {
+    workingText = workingText.replace(new RegExp(name, 'i'), name);
     spellChecker.find(name, function(misspelled) {
       workingText = workingText.replace(misspelled, name);
     });
@@ -33,9 +35,7 @@ module.exports = function scanForCoordinates(text, found) {
         return '[' + x + ',' + y + ']';
       });
       if(coordinates) {
-        var area = grep(workingText, /Incarnam|Dark Jungle|Canopy Village/i, function(area) {
-          return utils.titleCase(area);
-        });
+        var area = grep(workingText, areaPattern);
         var uses = grep(workingText, /\(?(\d+)\)?\s+uses/, function(_, number) {
           return parseInt(number);
         });
