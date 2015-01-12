@@ -1,16 +1,18 @@
 var levenshtein = require('levenshtein-distance');
 var utils = require('./utils');
 var grep = utils.grep;
-var dimensions = require('./names').dimensions;
+var names = require('./names');
+var dimensions = names.dimension;
+var areas = names.areas;
 var dimensionPattern = new RegExp(dimensions.join('|'), 'i');
 
 module.exports = function scanForCoordinates(text, found) {
   var nextDimension;
   var workingText = text;
   var spellChecker = new levenshtein(workingText.split(/\s+/));
-  dimensions.forEach(function(dimension) {
-    spellChecker.find(dimension, function(misspelled) {
-      workingText = workingText.replace(misspelled, dimension);
+  names.concat(areas).forEach(function(name) {
+    spellChecker.find(name, function(misspelled) {
+      workingText = workingText.replace(misspelled, name);
     });
   });
   workingText = workingText.replace(/\bxel\b/i, 'Xelorium');
