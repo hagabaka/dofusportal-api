@@ -1,4 +1,5 @@
 var page = require('./ipb').page;
+var $ = require('cheerio');
 var dimensions = require('./names').dimensions;
 var titleCase = require('./utils').titleCase;
 var scanForCoordinates = require('./parser');
@@ -7,6 +8,10 @@ function appendData(parsedPage, portals) {
   parsedPage.posts().reverse().forEach(function(post) {
     var body = post.body;
     body.find('.ipsBlockquote').remove();
+    body.find('p, br').each(function() {
+      var $this = $(this);
+      $this.text($this.text() + '\n');
+    });
     scanForCoordinates(body.text(), function(dimension, coordinates, details) {
       portals[titleCase(dimension)].push({
         coordinates: coordinates,
