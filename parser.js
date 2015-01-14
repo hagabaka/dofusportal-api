@@ -23,7 +23,7 @@ module.exports = function scanForCoordinates(text, found) {
     var coordinates = grep(line, /(-?\d+),\s*(-?\d+)/, function(_, x, y) {
       return '[' + x + ',' + y + ']';
     });
-    var uses = grep(line, /\(?(\d+)\)?\s+uses?\b/, function(_, number) {
+    var uses = grep(line, /\(?(\d+)\)?\s*uses?\b/, function(_, number) {
       return parseInt(number);
     });
     if(dimension && coordinates) {
