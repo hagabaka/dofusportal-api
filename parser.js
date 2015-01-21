@@ -20,7 +20,7 @@ module.exports = function scanForCoordinates(text, found) {
   text.split(/\r?\n/).forEach(function(line) {
     var dimension = grep(line, dimensionPattern);
     var area = grep(line, areaPattern);
-    var coordinates = grep(line, /(-?\d+),\s*(-?\d+)/, function(_, x, y) {
+    var coordinates = grep(line, /(-?\d+)\s*,\s*(-?\d+)/, function(_, x, y) {
       return '[' + x + ',' + y + ']';
     });
     var uses = grep(line, /\(?(\d+)\)?\s*uses?\b/, function(_, number) {
