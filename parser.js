@@ -7,6 +7,25 @@ var dimensionPattern = new RegExp(dimensions.join('|'), 'i');
 var areas = names.areas;
 var areaPattern = new RegExp(areas.join('|'), 'i');
 
+function scanForOnePortal(text, found) {
+  var dimension = grep(text, dimensionPattern);
+  var area = grep(text, areaPattern);
+  var coordinates = grep(text, /(-?\d+)\s*,\s*(-?\d+)/, function(_, x, y) {
+    return '[' + x + ',' + y + ']';
+  });
+  var uses = grep(text, /\(?(\d+)\)?\s*uses?\b/, function(_, number) {
+    return parseInt(number);
+  });
+  var foundInText = dimension && coordinates;
+  if(foundInText) {
+    found(dimension, coordinates, {
+      area: area,
+      uses: uses
+    });
+  }
+  return foundInText;
+}
+
 module.exports = function scanForCoordinates(text, found) {
   var spellChecker = new levenshtein(text.split(/\s+/));
   dimensions.concat(areas).forEach(function(name) {
@@ -17,20 +36,13 @@ module.exports = function scanForCoordinates(text, found) {
   });
   text = text.replace(/\bxel\b/i, 'Xelorium');
 
+  // First try to scan for a portal in each line
+  var foundInAnyLine = false;
   text.split(/\r?\n/).forEach(function(line) {
-    var dimension = grep(line, dimensionPattern);
-    var area = grep(line, areaPattern);
-    var coordinates = grep(line, /(-?\d+)\s*,\s*(-?\d+)/, function(_, x, y) {
-      return '[' + x + ',' + y + ']';
-    });
-    var uses = grep(line, /\(?(\d+)\)?\s*uses?\b/, function(_, number) {
-      return parseInt(number);
-    });
-    if(dimension && coordinates) {
-      found(dimension, coordinates, {
-        area: area,
-        uses: uses
-      });
-    }
+    foundInAnyLine = scanForOnePortal(line, found) || foundInAnyLine;
   });
+  // If scanning by line fails, try to scan for a portal in the entire text
+  if(!foundInAnyLine) {
+    scanForOnePortal(text, found);
+  }
 };
