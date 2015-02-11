@@ -10,7 +10,7 @@ var areaPattern = new RegExp(areas.join('|'), 'i');
 function scanForOnePortal(text, found) {
   var dimension = grep(text, dimensionPattern);
   var area = grep(text, areaPattern);
-  var coordinates = grep(text, /(-?\d+)\s*,\s*(-?\d+)/, function(_, x, y) {
+  var coordinates = grep(text, /(-?\d+)\s*[,;]\s*(-?\d+)/, function(_, x, y) {
     return '[' + x + ',' + y + ']';
   });
   var uses = grep(text, /\(?(\d+)\)?\s*uses?\b/, function(_, number) {
