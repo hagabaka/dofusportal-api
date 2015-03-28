@@ -13,7 +13,7 @@ function scanForOnePortal(text, found) {
   var coordinates = grep(text, /(-?\d+)\s*[,;]\s*(-?\d+)/, function(_, x, y) {
     return '[' + x + ',' + y + ']';
   });
-  var uses = grep(text, /\(?(\d+)\)?\s*uses?\b/, function(_, number) {
+  var uses = grep(text, /\(?(\d+)\)?\s*(?:free|remaining)?\s*uses?\b/i, function(_, number) {
     return parseInt(number);
   });
   var foundInText = dimension && coordinates;
