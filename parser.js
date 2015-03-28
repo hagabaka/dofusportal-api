@@ -26,7 +26,7 @@ function scanForOnePortal(text, found) {
   return foundInText;
 }
 
-module.exports = function scanForCoordinates(text, found) {
+module.exports = function scanForCoordinates(text, handlePortal) {
   var spellChecker = new levenshtein(text.split(/\s+/));
   dimensions.concat(areas).forEach(function(name) {
     text = text.replace(new RegExp(name, 'i'), name);
@@ -37,12 +37,20 @@ module.exports = function scanForCoordinates(text, found) {
   text = text.replace(/\bxel\b/i, 'Xelorium');
 
   // First try to scan for a portal in each line
-  var foundInAnyLine = false;
+  var portalsFound = [];
   text.split(/\r?\n/).forEach(function(line) {
-    foundInAnyLine = scanForOnePortal(line, found) || foundInAnyLine;
+    scanForOnePortal(line, function() {
+      portalsFound.push(arguments);
+    });
   });
-  // If scanning by line fails, try to scan for a portal in the entire text
-  if(!foundInAnyLine) {
-    scanForOnePortal(text, found);
+  // If multiple portals are found, handle them
+  if(portalsFound.length > 1) {
+    portalsFound.forEach(function(portal) {
+      handlePortal.apply(null, portal);
+    });
+  } else {
+    // If scanning by line fails, or only one portal is found,
+    // try to scan for a portal in the entire text and handle it
+    scanForOnePortal(text, handlePortal);
   }
 };
