@@ -34,7 +34,10 @@ module.exports = function scanForCoordinates(text, handlePortal) {
       text = text.replace(misspelled, name);
     });
   });
+  text = text.replace(/\beca\b/i, 'Ecaflipus');
+  text = text.replace(/\benu\b/i, 'Enurado');
   text = text.replace(/\bxel\b/i, 'Xelorium');
+  text = text.replace(/\bsram\b/i, 'Srambad');
 
   // First try to scan for a portal in each line
   var portalsFound = [];
