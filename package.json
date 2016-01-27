@@ -15,7 +15,7 @@
   "dependencies": {
     "cheerio": "^0.18.0",
     "express": "^4.10.4",
-    "express-eventsource": "0.0.3",
+    "express-eventsource": "0.0.4",
     "levenshtein-distance": "0.0.2",
     "redis": "^0.12.1",
     "sync-request": "^1.0.1"
