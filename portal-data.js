@@ -33,11 +33,13 @@ exports.portalData = function(url) {
   try {
     var previousPage = page(url).lastPage();
     var parsedPage;
+    var pageCount = 0;
     do {
+      pageCount++;
       parsedPage = page(previousPage);
       appendData(parsedPage, portals);
       previousPage = parsedPage.previousPage();
-    } while(previousPage && dimensions.some(function(dimension) {
+    } while(pageCount <= 3 && previousPage && dimensions.some(function(dimension) {
       return portals[dimension].length < 3;
     }));
     return {source: url, portals: portals, edit: parsedPage.replyUrl()};
