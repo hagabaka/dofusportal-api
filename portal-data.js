@@ -1,4 +1,3 @@
-var page = require('./ipb').page;
 var $ = require('cheerio');
 var dimensions = require('./names').dimensions;
 var titleCase = require('./utils').titleCase;
@@ -24,7 +23,7 @@ function appendData(parsedPage, portals) {
   });
 }
 
-exports.portalData = function(url) {
+exports.portalData = function(url, page) {
   portals = {};
   dimensions.forEach(function(dimension) {
     portals[dimension] = [];
