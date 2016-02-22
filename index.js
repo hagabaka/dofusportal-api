@@ -13,6 +13,10 @@ app.use(function(request, response, next) {
   return next();
 });
 
+app.listen(app.get('port'), function() {
+  console.log("Node app is running at localhost:" + app.get('port'));
+});
+
 function handleServer(name, url, pageParser) {
   var data = portalData(url, pageParser);
   if(data) {
@@ -60,8 +64,4 @@ handleServer('Zatoishwan',
   'http://forum.dofus.com/en/1045-zatoishwan/319280-zato-dimension-portal-positions', dofusForum); 
 handleServer('Test',
  'http://impsvillage.com/forums/topic/149030-test-server-dimension-portal-positions/', ipb);
-
-app.listen(app.get('port'), function() {
-  console.log("Node app is running at localhost:" + app.get('port'));
-});
 
