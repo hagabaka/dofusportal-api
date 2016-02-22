@@ -60,7 +60,7 @@ exports.page = function(url) {
              url;
     },
     replyUrl: function() {
-      return url.replace(/(\/\d+)-([^\/]+)$/, "$1-reply-$2");
+      return url.replace(/\/\d+-[^\/]+(\/\d+)-([^\/]+)$/, "$1-reply-$2");
     }
   };
 };
