@@ -23,6 +23,7 @@ function appendData(parsedPage, portals) {
   });
 }
 
+var MAX_PORTALS_PER_DIMENSION = 3;
 exports.portalData = function(url, page) {
   portals = {};
   dimensions.forEach(function(dimension) {
@@ -39,8 +40,11 @@ exports.portalData = function(url, page) {
       appendData(parsedPage, portals);
       previousPage = parsedPage.previousPage();
     } while(pageCount <= 3 && previousPage && dimensions.some(function(dimension) {
-      return portals[dimension].length < 3;
+      return portals[dimension].length < MAX_PORTALS_PER_DIMENSION;
     }));
+    dimensions.forEach(function(dimension) {
+      portals[dimension].splice(MAX_PORTALS_PER_DIMENSION);
+    });
     return {source: url, portals: portals, edit: parsedPage.replyUrl()};
   } catch(exception) {
     console.error(exception.stack);
