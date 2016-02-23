@@ -15,6 +15,10 @@ exports.page = function(url) {
           }
           if(postingDate.match(/Today/i)) {
             postingDate = postingDate.replace(/Today/i, new Date().toDateString());
+          } else if(postingDate.match(/Yesterday/)) {
+            var yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            postingDate = postingDate.replace(/Yesterday/i, yesterday.toDateString());
           }
           postingDate = new Date(postingDate.replace(/[^a-zA-Z0-9\s,:]/, '').trim());
         }
