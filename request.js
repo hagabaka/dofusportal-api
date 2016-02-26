@@ -1,4 +1,4 @@
-var request = require('sync-request');
+var request = require('then-request');
 module.exports = function(url) {
-  return request('GET', url).getBody().toString();
+  return request('GET', url).getBody();
 }

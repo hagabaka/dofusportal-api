@@ -18,6 +18,6 @@
     "express-eventsource": "0.0.4",
     "levenshtein-distance": "0.0.2",
     "redis": "^0.12.1",
-    "sync-request": "^1.0.1"
+    "then-request": "^2.1.1"
   }
 }
