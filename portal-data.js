@@ -30,9 +30,9 @@ PortalData.prototype.handleUrl = function(url) {
   var self = this;
   return this.pageParser(url).then(function(parsedPage) {
     var previousPage = parsedPage.previousPage();
-    if(self.pageCount <= MAX_PAGE_COUNT &&
-       previousPage &&
-       self.appendData(parsedPage) !== ENOUGH_PORTALS
+    if(self.appendData(parsedPage) !== ENOUGH_PORTALS && 
+       self.pageCount <= MAX_PAGE_COUNT &&
+       previousPage 
     ) {
       return self.handleUrl(previousPage);
     }
