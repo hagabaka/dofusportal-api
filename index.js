@@ -25,10 +25,11 @@ function ServerHandler(name, url, pageParser) {
   this.sse = eventsource({pingInterval: 25000});
 }
 ServerHandler.prototype.start = function() {
+  var self = this;
   app.get('/' + this.name, function(request, response) {
     response.setHeader('Cache-Control', 'Public');
-    if(this.data) {
-      response.send(this.data);
+    if(self.data) {
+      response.send(self.data);
     } else {
       response.status(502).json({error: 'Error opening the forum'});
     }
@@ -40,12 +41,15 @@ ServerHandler.prototype.start = function() {
   }, this.sse.middleware());
   this.load();
   this.refresh();
-  setInterval(this.refresh.bind(this), 180000);
+  setInterval(function() {
+    self.refresh();
+  }, 180000);
 };
 ServerHandler.prototype.load = function() {
+  var self = this;
   storage.get(this.name, function(data) {
-    if(!this.data) {
-      this.data = data;
+    if(!self.data) {
+      self.data = data;
     }
   });
 };
