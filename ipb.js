@@ -6,15 +6,15 @@ exports.page = function(url) {
     var $ = cheerio.load(content);
     return {
       posts: function() {
-        return $('.post_block').map(function() {
-          var postingDate = $(this).find('[itemprop=commentTime]').attr('title');
+        return $('article.cPost').map(function() {
+          var postingDate = $(this).find('a > time').attr('datetime');
           return {
-            author: $(this).find('.author_info [itemprop=name]').text(),
-            body: $(this).find('[itemprop=commentText]'),
-            url: $('a[rel="bookmark"]').attr('href'),
+            author: $(this).find('.cAuthorPane_author [itemprop=name] a').text(),
+            body: $(this).find('[itemprop=text]'),
+            url: $('a[data-roll="shareComment"]').attr('href'),
             postingDate: postingDate,
             editingDate: function() {
-              var dateString = $(this).find('.edit strong').text().replace(/^Edited by [^,]+, (.+)\.$/, '$1');
+              var dateString = $(this).find('strong > time').attr('datetime');
               var date = new Date(dateString);
               if(date.valueOf()) {
                 return dateString;
@@ -25,17 +25,17 @@ exports.page = function(url) {
         }).toArray();
       },
       previousPage: function() {
-        return $('.topic_controls .prev a').attr('href');
+        return $('.ipsPagination_prev a').attr('href');
       },
       nextPage: function() {
-        return $('.topic_controls .next a').attr('href');
+        return $('.ipsPagination_next a').attr('href');
       },
       firstPage: function() {
-        return $('.topic_controls .pages li:nth-child(2) a').attr('href') || url;
+        return $('.ipsPagination_first a').attr('href') || url;
       },
       lastPage: function() {
-        return $('.topic_controls .forward li.last a').attr('href') ||
-          $('.topic_controls .pages li:last-child a').attr('href') || url;
+        return $('.ipsPagination_last a').attr('href') ||
+          $('.ipsPagination li:last-child a').attr('href') || url;
       },
       replyUrl: function() {
         var upUrl = $('link[rel=up]').attr('href');
