@@ -44,6 +44,8 @@ exports.page = function(url) {
           var postNumber = url.match(/topic\/(\d+)/)[1];
           var baseUrl = url.match(/(.+)\/topic\/.+/)[1];
           return baseUrl + '/index.php?app=forums&module=post&section=post&do=reply_post&f=' + forumNumber + '&t=' + postNumber;
+        } else {
+          return url + '#replyForm';
         }
       }
     };
