@@ -64,6 +64,8 @@ ServerHandler.prototype.refresh = function() {
   });
 };
 
+new ServerHandler('Echo',
+  'http://impsvillage.com/forums/topic/151786-echo-dimension-portal-positions/', ipb).start();
 new ServerHandler('Rushu',
   'http://impsvillage.com/forums/topic/144221-rushu-dimension-portal-positions/', ipb).start();
 new ServerHandler('Rosal',
