@@ -18,7 +18,7 @@ app.listen(app.get('port'), function() {
 });
 
 function ServerHandler(name, url, pageParser) {
-  this.name = name;
+  this.name = encodeURIComponent(name);
   this.url = url;
   this.pageParser = pageParser;
   this.data = null;
@@ -66,7 +66,7 @@ ServerHandler.prototype.refresh = function() {
 
 new ServerHandler('Echo',
   'http://impsvillage.com/forums/topic/151786-echo-dimension-portal-positions/', ipb).start();
-new ServerHandler('OtoMustam',
+new ServerHandler('Oto Mustam',
   'http://impsvillage.com/forums/topic/151835-oto-mustam-dimension-portal-positions/', ipb).start();
 new ServerHandler('Rushu',
   'http://impsvillage.com/forums/topic/144221-rushu-dimension-portal-positions/', ipb).start();
